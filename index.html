@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carro de Compras</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(black, white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            margin-bottom: 32px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border: 5px solid black;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        #finalMessage {
+            font-size: 24px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .fa {
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+        function formatCardInput(event) {
+            let value = event.target.value.replace(/\D/g, '').substr(0, 16);
+            let formatted = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formatted += ' - ';
+                }
+                formatted += value[i];
+            }
+            event.target.value = formatted;
+        }
+
+        function formatExpiryInput(event) {
+            let value = event.target.value.replace(/\D/g, '').substr(0, 4);
+            if (value.length > 2) {
+                event.target.value = value.slice(0, 2) + '/' + value.slice(2);
+            } else {
+                event.target.value = value;
+            }
+        }
+
+        function formatCVVInput(event) {
+            event.target.value = event.target.value.replace(/\D/g, '').substr(0, 3);
+        }
+
+        function validateSection1() {
+            let products = document.querySelectorAll('.product-input');
+            for (let product of products) {
+                if (product.value === '') {
+                    alert('Completa todos los campos antes de continuar');
+                    return false;
+                }
+            }
+            document.getElementById('section2').style.display = 'block';
+        }
+
+        function validateSection2() {
+            let paymentFields = document.querySelectorAll('.payment-input');
+            for (let field of paymentFields) {
+                if (field.value === '') {
+                    alert('Completa todos los campos antes de continuar');
+                    return false;
+                }
+            }
+            document.getElementById('section3').style.display = 'block';
+        }
+
+        function validateSection3() {
+            if (document.getElementById('address').value === '') {
+                alert('Completa todos los campos antes de continuar');
+                return false;
+            }
+            document.getElementById('section4').style.display = 'block';
+        }
+
+        function purchase() {
+            document.getElementById('container').style.display = 'none';
+            document.getElementById('finalMessage').style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+    <h1>COMERCIO MONTBLACK</h1>
+    <div class="container" id="container">
+        <div class="section" id="section1">
+            <h2>Productos</h2>
+            <label for="televisor"><i class="fa fa-tv"></i>Televisor:</label>
+            <input type="number" id="televisor" class="product-input"><br><br>
+
+            <label for="audifonos"><i class="fa fa-headphones"></i>Audifonos:</label>
+            <input type="number" id="audifonos" class="product-input"><br><br>
+
+            <label for="polera"><i class="fa fa-tshirt"></i>Polera:</label>
+            <input type="number" id="polera" class="product-input"><br><br>
+
+            <label for="jeans"><i class="fa fa-socks"></i>Calcetines:</label>
+            <input type="number" id="socks" class="product-input"><br><br>
+
+            <button onclick="validateSection1()">Continuar</button>
+        </div>
+
+        <div class="section" id="section2" style="display:none;">
+            <h2>Información de Pago</h2>
+            <label for="card">Tarjeta:</label>
+            <input type="text" id="card" class="payment-input" placeholder="XXXX - XXXX - XXXX - XXXX" oninput="formatCardInput(event)"><br><br>
+
+            <label for="expiry">Fecha Expiración:</label>
+            <input type="text" id="expiry" class="payment-input" placeholder="MM/YY" oninput="formatExpiryInput(event)"><br><br>
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" class="payment-input" placeholder="XXX" oninput="formatCVVInput(event)"><br><br>
+
+            <button onclick="validateSection2()">Continuar</button>
+        </div>
+
+        <div class="section" id="section3" style="display:none;">
+            <h2>Dirección de Despacho</h2>
+            <textarea id="address" rows="3" style="width:100%;"></textarea><br><br>
+
+            <button onclick="validateSection3()">Continuar</button>
+        </div>
+
+        <div class="section" id="section4" style="display:none;">
+            <h2>Confirmar Compra</h2>
+            <button onclick="purchase()">Proceder a Comprar</button>
+        </div>
+    </div>
+
+    <div id="finalMessage">PRODUCTOS COMPRADOS</div>
+</body>
+</html>
