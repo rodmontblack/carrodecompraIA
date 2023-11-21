@@ -52,6 +52,27 @@
         }
     </style>
     <script>
+    function calculateTotalPrice() {
+    const priceTelevisor = 100000;
+    const priceAudifonos = 50000;
+    const pricePolera = 10000;
+    const priceCalcetines = 5000;
+
+    const quantityTelevisor = parseInt(document.getElementById('televisor').value) || 0;
+    const quantityAudifonos = parseInt(document.getElementById('audifonos').value) || 0;
+    const quantityPolera = parseInt(document.getElementById('polera').value) || 0;
+    const quantityCalcetines = parseInt(document.getElementById('calcetines').value) || 0;
+
+    const totalPrice = (quantityTelevisor * priceTelevisor) +
+                       (quantityAudifonos * priceAudifonos) +
+                       (quantityPolera * pricePolera) +
+                       (quantityCalcetines * priceCalcetines);
+
+    document.getElementById('totalPrice').innerText = 'Total a Pagar: $' + totalPrice.toLocaleString('es-CL');
+}
+
+
+    
         function formatCardInput(event) {
             let value = event.target.value.replace(/\D/g, '').substr(0, 16);
             let formatted = '';
@@ -78,15 +99,23 @@
         }
 
         function validateSection1() {
-            let products = document.querySelectorAll('.product-input');
-            for (let product of products) {
-                if (product.value === '') {
-                    alert('Completa todos los campos antes de continuar');
-                    return false;
-                }
-            }
-            document.getElementById('section2').style.display = 'block';
+    let products = document.querySelectorAll('.product-input');
+    let allFilled = true;
+    for (let product of products) {
+        if (product.value === '') {
+            allFilled = false;
+            break;
         }
+    }
+
+    if (allFilled) {
+        calculateTotalPrice();
+        document.getElementById('section2').style.display = 'block';
+    } else {
+        alert('Completa todos los campos antes de continuar');
+    }
+}
+
 
         function validateSection2() {
             let paymentFields = document.querySelectorAll('.payment-input');
@@ -118,18 +147,20 @@
     <div class="container" id="container">
         <div class="section" id="section1">
             <h2>Productos</h2>
-            <label for="televisor"><i class="fa fa-tv"></i>Televisor:</label>
-            <input type="number" id="televisor" class="product-input"><br><br>
+            <label for="televisor"><i class="fa fa-tv"></i>Televisor (Precio unitario: $100.000):</label>
+            <input type="number" id="televisor" class="product-input" onchange="calculateTotalPrice()"><br><br>
 
-            <label for="audifonos"><i class="fa fa-headphones"></i>Audifonos:</label>
-            <input type="number" id="audifonos" class="product-input"><br><br>
+            <label for="audifonos"><i class="fa fa-headphones"></i>Audifonos (Precio unitario: $50.000):</label>
+            <input type="number" id="audifonos" class="product-input" onchange="calculateTotalPrice()"><br><br>
 
-            <label for="polera"><i class="fa fa-tshirt"></i>Polera:</label>
-            <input type="number" id="polera" class="product-input"><br><br>
+            <label for="polera"><i class="fa fa-tshirt"></i>Polera (Precio unitario: $10.000):</label>
+            <input type="number" id="polera" class="product-input" onchange="calculateTotalPrice()"><br><br>
 
-            <label for="calcetines"><i class="fa fa-socks"></i>Calcetines:</label>
-            <input type="number" id="calcetines" class="product-input"><br><br>
-
+            <label for="calcetines"><i class="fa fa-socks"></i>Calcetines (Precio unitario: $5.000):</label>
+            <input type="number" id="calcetines" class="product-input" onchange="calculateTotalPrice()"><br><br>
+<div class="section" style="color: black;">
+    <h2 id="totalPrice">Total a Pagar: $0</h2>
+</div>
             <button onclick="validateSection1()">Continuar</button>
         </div>
 
